@@ -53,8 +53,9 @@ def load_products():
     products = c.fetchall()
     conn.close()
 
-    for product in products:
-        tree.insert('', 'end', values=product)
+    for index, product in enumerate(products, start=1):
+        tree.insert('', 'end', iid=index, values=(index, *product[1:]))
+    
 
 # Função para editar um produto
 def edit_product():
@@ -127,8 +128,8 @@ def search_products():
     for row in tree.get_children():
         tree.delete(row)
 
-    for product in results:
-        tree.insert('', 'end', values=product)
+    for index, product in enumerate(results, start=1):
+        tree.insert('', 'end', iid=index, values=(index, *product[1:]))
 
 # Inicialização do banco de dados
 init_db()
@@ -207,6 +208,7 @@ frame_table.pack(side=tk.RIGHT, fill=tk.BOTH, padx=10, pady=10, expand=True)
 # Criando a tabela
 tree = ttk.Treeview(frame_table, columns=("id", "codigo", "fabricante", "velocidade", "nucleos", "ram", "fabricante_processador", "ssd"), show='headings')
 tree.heading("id", text="ID")
+tree.column('#0', width=0, minwidth=0, stretch=False)
 tree.heading("codigo", text="Código")
 tree.heading("fabricante", text="Fabricante")
 tree.heading("velocidade", text="Velocidade (GHz)")
